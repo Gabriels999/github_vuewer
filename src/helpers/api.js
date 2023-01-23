@@ -9,8 +9,19 @@ export const searchUsersAPI = {
 export const fetchRepos = {
   async userRepos(link) {
     let page = 1;
-    const response = await fetch(`${link}?page=${page}`);
-    const data = await response.json();
-    return data;
+    let search = true;
+    let responseList = [];
+    while (search) {
+      const response = await fetch(`${link}?page=${page}`);
+      const data = await response.json();
+      if (data.length > 0) {
+        responseList = responseList.concat(data);
+      } else {
+        search = false;
+      }
+      page++;
+    }
+    debugger;
+    return responseList;
   },
 };

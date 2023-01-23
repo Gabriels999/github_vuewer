@@ -6,9 +6,7 @@
           v-model="selectedRepo"
           :items="userRepos"
           :loading="reposIsLoading"
-          :hint="`Stars: ${selectedRepo.stargazers_count}`"
           item-text="name"
-          item-value="stargazers_count"
           label="User Repos"
           persistent-hint
           return-object
@@ -24,14 +22,13 @@ import { fetchRepos } from "@/helpers/api";
 export default {
   props: ["reposURL"],
   data: () => ({
-    selectedRepo: { name: null, stargazers_count: 0 },
+    selectedRepo: { name: null },
     reposIsLoading: false,
-    userRepos: [{ name: "Selecione um usuario", stargazers_count: 0 }],
+    userRepos: [{ name: "Selecione um usuario" }],
   }),
   methods: {
     async getRepos() {
       this.reposIsLoading = true;
-      debugger;
       const data = await fetchRepos.userRepos(this.reposURL);
       this.reposIsLoading = false;
       return data;
@@ -39,9 +36,13 @@ export default {
   },
   watch: {
     async reposURL() {
+      console.log(this.userRepos);
       this.userRepos = await this.getRepos();
+      debugger;
     },
-    selectedRepo() {},
+    selectedRepo() {
+      console.log(this.selectedRepo.contents_url);
+    },
   },
 };
 </script>
