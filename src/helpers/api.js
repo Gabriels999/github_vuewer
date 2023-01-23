@@ -5,3 +5,12 @@ export const searchUsersAPI = {
     return data.items;
   },
 };
+
+export const fetchRepos = {
+  async userRepos(link) {
+    let page = 1;
+    const response = await fetch(`${link}?page=${page}`);
+    const data = await response.json();
+    return data;
+  },
+};

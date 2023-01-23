@@ -19,6 +19,9 @@
                 return-object
               ></v-autocomplete>
             </v-card-text>
+            <v-list-item-avatar v-show="user">
+              <img :src="user.avatar_url" />
+            </v-list-item-avatar>
           </v-card>
         </template>
       </v-col>
@@ -31,7 +34,7 @@ import { searchUsersAPI } from "@/helpers/api";
 
 export default {
   data: () => ({
-    user: null,
+    user: "",
     searchUser: null,
     usersList: [],
     userIsLoading: false,
@@ -47,6 +50,9 @@ export default {
         return (this.userIsLoading = false);
       }
       this.fetchUsersDebounced();
+    },
+    user() {
+      this.$emit("update", this.user);
     },
   },
   methods: {
