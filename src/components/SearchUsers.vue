@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { searchUsersAPI } from "@/helpers/api";
+
 export default {
   data: () => ({
     user: null,
@@ -38,18 +40,27 @@ export default {
   watch: {
     searchUser() {
       this.userIsLoading = true;
+      this.clearUserList();
 
       // Items have already been loaded
       if (this.usersList.length > 0) {
         return (this.userIsLoading = false);
       }
-
-      this.usersList = [{ login: "gabi" }, { login: "sara" }];
-
-      // Items have already been requested
-      if (this.userIsLoading) return;
-
-      this.userIsLoading = false;
+      this.fetchUsersDebounced();
+    },
+  },
+  methods: {
+    clearUserList() {
+      this.usersList = [];
+    },
+    fetchUsersDebounced() {
+      clearTimeout(this._searchTimerId);
+      this._searchTimerId = setTimeout(() => {
+        searchUsersAPI.fetchUsers(this.searchUser).then((data) => {
+          this.usersList = data;
+          this.userIsLoading = false;
+        });
+      }, 500);
     },
   },
 };
