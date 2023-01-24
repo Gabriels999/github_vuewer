@@ -5,6 +5,7 @@ function treatRepoLink(path) {
 
 function createFileField(filename) {
   const startString = filename.lastIndexOf(".");
+  if (startString == -1) return "dir";
   return filename.substring(startString + 1);
 }
 
@@ -39,9 +40,9 @@ export const API = {
       if (file.type == "dir") {
         const aux = await fetch(`${treatedPath}/${file.path}`);
         const data = await aux.json();
-        // for (const child of data) {
-        //   child["file"] = createFileField(child.name);
-        // }
+        for (const child of data) {
+          child["file"] = createFileField(child.name);
+        }
         file["children"] = data;
       } else {
         file["file"] = createFileField(file.name);
@@ -50,13 +51,4 @@ export const API = {
     }
     return responseList;
   },
-  // async fetchFileChildren(baseLink, filePath, fileType) {
-  //   // if (fileType == "file") {
-  //     //   return false;
-  //     // }
-  //   const repoFiles = this.fetchFileChildren(baseLink)
-  //   const treatedPath = treatRepoLink(baseLink)
-
-  //   return data;
-  // },
 };
