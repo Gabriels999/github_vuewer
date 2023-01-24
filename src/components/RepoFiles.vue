@@ -2,7 +2,7 @@
   <div>
     <template>
       <div>
-        <v-breadcrumbs divider=">" :items="items" @click="resetItems"></v-breadcrumbs>
+        <v-breadcrumbs divider=">" :items="breadcrumbPath" @click="resetBreadcrumb"></v-breadcrumbs>
       </div>
     </template>
     <v-card class="mx-auto">
@@ -17,30 +17,20 @@
         >
           <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title>{{ file.name }}</v-list-item-title>
+              <v-list-item-title v-text="file.name"></v-list-item-title>
             </v-list-item-content>
             <v-list-item-icon>
-              <v-icon>{{ file.type === "dir" ? "mdi-folder" : "mdi-file" }}</v-icon>
+              <v-icon v-text="file.type === 'dir' ? 'mdi-folder' : 'mdi-file'"></v-icon>
             </v-list-item-icon>
-            <template v-if="childrenFiles">
-              <v-row
-                v-for="childFile in childrenFiles"
-                :loading="searchingFiles"
-                :key="childFile.name"
-                @click="selectFile(childFile)"
-                no-action
-              >
-                <template v-slot:activator>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ childFile.name }}</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-icon>
-                    <v-icon>{{ childFile.type === "dir" ? "mdi-folder" : "mdi-file" }}</v-icon>
-                  </v-list-item-icon>
-                </template>
-              </v-row>
-            </template>
           </template>
+          <v-list-item v-if="file.childrenFiles">
+            <v-list-item-content v-for="childFile in file.childrenFiles" :key="childFile.name" no-action>
+              <v-list-item-title v-text="childFile.name"></v-list-item-title>
+              <v-list-item-icon>
+                <v-icon v-text="childFile.type === 'dir' ? 'mdi-folder' : 'mdi-file'"></v-icon>
+              </v-list-item-icon>
+            </v-list-item-content>
+          </v-list-item>
         </v-list-group>
       </v-list>
     </v-card>
@@ -56,27 +46,30 @@ export default {
     selectedRepoLink: "",
     searchingFiles: false,
     repoFiles: [],
-    items: [
+    breadcrumbPath: [
       {
         text: "/",
         disabled: true,
       },
     ],
     selectedFile: null,
-    childrenFiles: null,
   }),
   methods: {
     async getFiles() {
       this.searchingFiles = true;
       const data = await API.fetchRepoData(this.repoLink);
       this.searchingFiles = false;
+      //mock
+      // return data;
+      //real
       return data.json();
     },
     selectFile(e) {
+      this.resetBreadcrumb();
       this.selectedFile = e;
     },
-    resetItems() {
-      this.items = [
+    resetBreadcrumb() {
+      this.breadcrumbPath = [
         {
           text: "/",
           disabled: true,
@@ -91,19 +84,26 @@ export default {
       this.repoFiles = await this.getFiles();
     },
     async selectedFile() {
-      this.resetItems();
-      const response = await API.fetchFileChildren(this.selectedRepoLink, this.selectedFile.path);
+      debugger;
+      const response = await API.fetchFileChildren(
+        this.selectedRepoLink,
+        this.selectedFile.path,
+        this.selectedFile.type,
+        this.selectedFile
+      );
       if (response.length > 0) {
         this.childrenFiles = response;
-        this.items.push({
+        this.breadcrumbPath.push({
           text: this.selectedFile.path,
           disable: true,
         });
+        this.selectedFile["childrenFiles"] = response;
       } else {
+        // usar campo download_url
         console.log("CHAMAR POPUP COM CONTEUDO DO ARQUIVO AQUI");
       }
     },
-    items() {},
+    breadcrumbPath() {},
   },
 };
 </script>

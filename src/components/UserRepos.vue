@@ -24,7 +24,7 @@ export default {
   data: () => ({
     selectedRepo: { name: null },
     reposIsLoading: false,
-    userRepos: [{ name: "Selecione um usuario" }],
+    userRepos: [],
   }),
   methods: {
     async getRepos() {

@@ -8,5 +8,7 @@ module.exports = {
   rules: {
     "vue/multi-word-component-names": "off",
     "no-debugger": "off",
+    "no-unused-vars": "off",
+    "no-unreachable": "off",
   },
 };

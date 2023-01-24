@@ -26,11 +26,15 @@ export const API = {
     const response = await fetch(link);
     return response;
   },
-  async fetchFileChildren(baseLink, filePath) {
+  async fetchFileChildren(baseLink, filePath, fileType) {
+    if (fileType == "file") {
+      return false;
+    }
     const endString = baseLink.lastIndexOf("/");
     baseLink = baseLink.slice(0, endString);
     const response = await fetch(`${baseLink}/${filePath}`);
     const data = await response.json();
+
     return data;
   },
 };
