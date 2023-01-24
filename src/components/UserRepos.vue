@@ -17,7 +17,7 @@
   </v-container>
 </template>
 <script>
-import { fetchRepos } from "@/helpers/api";
+import { API } from "@/helpers/api";
 
 export default {
   props: ["reposURL"],
@@ -29,19 +29,17 @@ export default {
   methods: {
     async getRepos() {
       this.reposIsLoading = true;
-      const data = await fetchRepos.userRepos(this.reposURL);
+      const data = await API.userRepos(this.reposURL);
       this.reposIsLoading = false;
       return data;
     },
   },
   watch: {
     async reposURL() {
-      console.log(this.userRepos);
       this.userRepos = await this.getRepos();
-      debugger;
     },
     selectedRepo() {
-      console.log(this.selectedRepo.contents_url);
+      this.$emit("repo", this.selectedRepo.contents_url);
     },
   },
 };

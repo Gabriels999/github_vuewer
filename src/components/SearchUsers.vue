@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { searchUsersAPI } from "@/helpers/api";
+import { API } from "@/helpers/api";
 
 export default {
   data: () => ({
@@ -62,7 +62,7 @@ export default {
     fetchUsersDebounced() {
       clearTimeout(this._searchTimerId);
       this._searchTimerId = setTimeout(() => {
-        searchUsersAPI.fetchUsers(this.searchUser).then((data) => {
+        API.fetchUsers(this.searchUser).then((data) => {
           this.usersList = data;
           this.userIsLoading = false;
         });

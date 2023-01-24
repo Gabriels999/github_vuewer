@@ -15,7 +15,8 @@
 
     <v-main>
       <SearchUsers @update="updateSelectUser" />
-      <UserRepos :reposURL="userReposURL" />
+      <UserRepos @repo="selectRepo" :reposURL="userReposURL" />
+      <RepoFiles :repoLink="selectedRepo" />
     </v-main>
   </v-app>
 </template>
@@ -23,6 +24,7 @@
 <script>
 import SearchUsers from "./components/SearchUsers";
 import UserRepos from "./components/UserRepos";
+import RepoFiles from "./components/RepoFiles";
 
 export default {
   name: "App",
@@ -30,14 +32,19 @@ export default {
   components: {
     SearchUsers,
     UserRepos,
+    RepoFiles,
   },
 
   data: () => ({
     userReposURL: null,
+    selectedRepo: null,
   }),
   methods: {
     updateSelectUser(e) {
       this.userReposURL = e.repos_url;
+    },
+    selectRepo(repo) {
+      this.selectedRepo = repo;
     },
   },
 };
