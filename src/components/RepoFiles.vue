@@ -13,23 +13,12 @@
 
 <script>
 import { API } from "@/helpers/api";
+import { icons } from "@/assets/icons";
 
 export default {
   props: ["repoLink"],
   data: () => ({
-    files: {
-      html: "mdi-language-html5",
-      js: "mdi-nodejs",
-      json: "mdi-code-json",
-      py: "mdi-language-python",
-      md: "mdi-language-markdown",
-      pdf: "mdi-file-pdf",
-      png: "mdi-file-image",
-      txt: "mdi-file-document-outline",
-      xls: "mdi-file-excel",
-      gitignore: "mdi-git",
-      dir: "mdi-folder",
-    },
+    files: {},
     tree: [],
     repoFiles: [],
     selectedRepoLink: "",
@@ -44,6 +33,7 @@ export default {
   },
   watch: {
     async repoLink() {
+      this.files = icons;
       this.selectedRepoLink = this.repoLink;
       this.repoFiles = await this.getFiles();
     },
