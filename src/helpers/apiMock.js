@@ -63,13 +63,19 @@ export const API = {
     ];
     const responseList = [];
     for (const file of repoFiles) {
-      if (file.type == "dir") {
-        file["children"] = repoFiles[1];
-      } else {
+      if (file.type == "file") {
         file["file"] = createFileField(file.name);
       }
       responseList.push(file);
     }
     return later(responseList);
+  },
+  async fetchFileContent(path) {
+    const text = "# meutodo\n\n## Project setup\n\nnpm install\n";
+    const name = "READme.md";
+    let data = {};
+    data["content"] = text;
+    data["name"] = name;
+    return later(data);
   },
 };

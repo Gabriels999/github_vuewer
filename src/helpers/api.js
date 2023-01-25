@@ -51,4 +51,9 @@ export const API = {
     }
     return responseList;
   },
+  async fetchFileContent(path) {
+    const response = await fetch(path);
+    let data = await response.text();
+    return data;
+  },
 };
